@@ -4,6 +4,29 @@
   <artifactId>commons-adi3000</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>commons-adi3000</name>
+  	<scm>
+		<url>https://github.com/Adi3000/latroquette.git</url>
+		<connection>scm:git:https://github.com/Adi3000/latroquette</connection>
+		<developerConnection>scm:git:git@github.com:Adi3000/latroquette.git</developerConnection>
+	</scm>
+	<ciManagement>
+		<url>code.a-dream-zone.com/nexus</url>
+		<system>Nexus</system>
+	</ciManagement>
+	<distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>releases</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://code.adi3000.com/nexus/content/repositories/releases</url>
+		</repository>
+		<!-- use the following if you ARE using a snapshot version. -->
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://code.adi3000.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
   <dependencies>
   	<dependency>
   		<groupId>javax.faces</groupId>
