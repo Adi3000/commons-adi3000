@@ -1,12 +1,13 @@
-package com.adi3000.common.database.hibernate.data;
+package com.adi3000.common.database.hibernate.session;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 
-import com.adi3000.common.database.hibernate.IDatabaseConstants;
-import com.adi3000.common.database.hibernate.session.DatabaseSession;
+import com.adi3000.common.database.hibernate.DatabaseOperation;
+import com.adi3000.common.database.hibernate.data.AbstractDataObject;
+import com.adi3000.common.database.hibernate.data.DataObject;
 
 public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 	
@@ -23,26 +24,24 @@ public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 	}
 	
 	public T getDataObjectById(Integer id, Class<? extends T> clazz){
+		initTransaction();
 		@SuppressWarnings("unchecked")
 		T data = (T)this.session.get(clazz, id);
 		return data ;
 	}
 	
 	public void modify(T data){
-		if(data.getDatabaseOperation() == IDatabaseConstants.DEFAULT){
+		if(data.getDatabaseOperation() == DatabaseOperation.DEFAULT){
 			if(data.getId() == null){
-				data.setDatabaseOperation(IDatabaseConstants.INSERT);
+				data.setDatabaseOperation(DatabaseOperation.INSERT);
 			}else{
-				data.setDatabaseOperation(IDatabaseConstants.UPDATE);
+				data.setDatabaseOperation(DatabaseOperation.UPDATE);
 			}
 		}
 		persist(data);
 	}
 	
 	public Collection<T>  modifyDataObject(Collection<T> data){
-		return modifyDataObject(data, false);
-	}
-	public Collection<T>  modifyDataObject(Collection<T> data, boolean merge){
 		Set<T> dataSet = null;
 		if(data instanceof Set){
 			dataSet = (Set<T>) data;
@@ -54,7 +53,7 @@ public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 				modify(datum);
 			}
 		}
-		if(commit()){
+		if(sendForCommit()){
 			return data;
 		}else{
 			return null;
@@ -62,7 +61,7 @@ public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 	}
 	public T  modifyDataObject(T data){
 		modify(data);
-		if(commit()){
+		if(sendForCommit()){
 			return data;
 		}else{
 			return null;
@@ -70,9 +69,9 @@ public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 	}
 	
 	public boolean deleteDataObject(T data){
-		data.setDatabaseOperation(IDatabaseConstants.DELETE);
+		data.setDatabaseOperation(DatabaseOperation.DELETE);
 		persist(data);
-		return commit();
+		return sendForCommit();
 	}
 	
 	public T getDataObject(AbstractDataObject model)

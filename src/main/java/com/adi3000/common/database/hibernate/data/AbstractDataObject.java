@@ -4,22 +4,22 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.adi3000.common.database.hibernate.IDatabaseConstants;
+import com.adi3000.common.database.hibernate.DatabaseOperation;
 
 public abstract class AbstractDataObject implements DataObject{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int databaseOperation;
+	private DatabaseOperation databaseOperation;
 	public AbstractDataObject(){
-		this.databaseOperation = IDatabaseConstants.DEFAULT; 
+		this.databaseOperation = DatabaseOperation.DEFAULT; 
 	}
 
 	/**
 	 * @param databaseOperation the databaseOperation to set
 	 */
-	public void setDatabaseOperation(int databaseOperation) {
+	public void setDatabaseOperation(DatabaseOperation databaseOperation) {
 		this.databaseOperation = databaseOperation;
 	}
 
@@ -27,7 +27,7 @@ public abstract class AbstractDataObject implements DataObject{
 	 * @return the databaseOperation
 	 */
 	@XmlTransient
-	public int getDatabaseOperation() {
+	public DatabaseOperation getDatabaseOperation() {
 		return databaseOperation;
 	}
 	

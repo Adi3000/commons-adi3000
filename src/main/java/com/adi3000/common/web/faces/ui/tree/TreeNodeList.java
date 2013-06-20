@@ -1,10 +1,10 @@
-package com.adi3000.common.util.tree;
+package com.adi3000.common.web.faces.ui.tree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.adi3000.common.web.faces.ui.tree.Node;
+import com.adi3000.common.util.tree.TreeNode;
 
 public class TreeNodeList<T extends TreeNode<T>> implements Serializable {
 

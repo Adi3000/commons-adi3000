@@ -89,20 +89,6 @@ public class Node<T extends TreeNode<T>> {
 		return this.parents.size();
 	}
 
-	/**
-	 * @return the parents
-	 */
-	public List<Node<T>> getParents() {
-		return parents;
-	}
-
-	/**
-	 * @param parents the parents to set
-	 */
-	public void setParents(List<Node<T>> parents) {
-		this.parents = parents;
-	}
-	
 	public int hashCode(){
 		int hash = 17;
 		hash *= parents.hashCode();
