@@ -16,8 +16,11 @@ public class TreeNodeList<T extends TreeNode<T>> implements Serializable {
 	 */
 	private static final long serialVersionUID = 7536347740078406017L;
 	public TreeNodeList(T root){
-		super();
 		this.rootNode =  new Node<T>(null,root);
+	}
+	
+	public TreeNodeList(Node<T> rootNode){
+		this.rootNode = rootNode;
 	}
 	
 	private void walk(Node<T> node){

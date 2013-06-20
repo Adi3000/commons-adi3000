@@ -23,10 +23,9 @@ public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 		super(initDbSession);
 	}
 	
-	public T getDataObjectById(Integer id, Class<? extends T> clazz){
-		initTransaction();
+	public T getDataObjectById(Integer id, Class<? extends DataObject> clazz){
 		@SuppressWarnings("unchecked")
-		T data = (T)this.session.get(clazz, id);
+		T data = (T)getSession().get(clazz, id);
 		return data ;
 	}
 	
@@ -77,7 +76,7 @@ public abstract class AbstractDAO<T extends DataObject> extends DatabaseSession{
 	public T getDataObject(AbstractDataObject model)
 	{
 		@SuppressWarnings("unchecked")
-		T toReturn = (T)session.get(model.getClass(), model.getId());
+		T toReturn = (T)getSession().get(model.getClass(), model.getId());
 
 		return toReturn;
 	}

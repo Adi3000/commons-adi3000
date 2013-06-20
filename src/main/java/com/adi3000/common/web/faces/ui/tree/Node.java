@@ -32,18 +32,21 @@ public class Node<T extends TreeNode<T>> {
 	
 	/**
 	 * Recursivly construct nodes with TreeObject
+	 * Will add only add children which respond to true with the {@code filter} method
 	 * @param list
 	 */
 	public void addChildren(List<T> list){
 		List<T> childrenKids = null;
 		Node<T> childrenNode = null;
 		for(T element : list){
-			childrenNode = new Node<T>(this,element);
-			childrenKids = element.getChildren();
-			if(childrenKids != null && !childrenKids.isEmpty()){
-				childrenNode.addChildren(childrenKids);
+			if(filter(element)){
+				childrenNode = initializaNewChildNode(element);
+				childrenKids = element.getChildren();
+				if(childrenKids != null && !childrenKids.isEmpty()){
+					childrenNode.addChildren(childrenKids);
+				}
+				this.children.add(childrenNode);
 			}
-			this.children.add(childrenNode);
 		}
 	}
 	public T getValue() { 
@@ -96,7 +99,7 @@ public class Node<T extends TreeNode<T>> {
 		return hash;
 	}
 	/**
-	 * Return true if the both Node have the same list of parentes and the same value
+	 * Return true if the both Node have the same list of parents and the same value
 	 * @param node
 	 * @return
 	 */
@@ -104,4 +107,22 @@ public class Node<T extends TreeNode<T>> {
 		return this.parents.equals(node.parents) && this.value.equals(node.value);
 	}
 	
+	/**
+	 * Filter  {@code toBeFiltered} and add it if only filter return true
+	 * Filter return always true, override this one to add some filter
+	 * @param toBeFiltered
+	 * @return
+	 */
+	protected boolean filter(T toBeFiltered){
+		return true;
+	}
+	
+	/**
+	 * Return a new node with {@code this} as parent
+	 * @param element
+	 * @return
+	 */
+	protected Node<T> initializaNewChildNode(T element){
+		return new Node<T>(this,element);
+	}
 }

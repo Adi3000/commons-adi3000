@@ -2,7 +2,6 @@ package com.adi3000.common.database.hibernate.session;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +10,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import com.adi3000.common.database.hibernate.data.AbstractDataObject;
 import com.adi3000.common.database.hibernate.data.DataObject;
@@ -20,29 +18,29 @@ import com.adi3000.common.database.hibernate.data.DataObject;
 public class DatabaseSession {
 	private static final Logger LOGGER = Logger.getLogger(DatabaseSession.class.getName());
 
-	protected Session session;
-	private boolean initDbSession;
-	private Transaction transaction;
-	private boolean willCommit;
+	private HibernateSession hibernateSession;
 	public DatabaseSession(DatabaseSession db){
-		setInitDbSession(true);
-		this.session = db.getSession();
-		this.transaction = db.transaction;
-		this.willCommit = db.willCommit;
+		this.hibernateSession = db.hibernateSession;
 	}
 	
-	public DatabaseSession(boolean initDbSession){
-		if(initDbSession){
-			setInitDbSession(true);
-			this.session = this.getSession();
-		}else{
-			setInitDbSession(false);
-		}
-		this.willCommit = true;
+	/**
+	 * initDbSession has no effect as it not needed for now use DatabaseSession(commitOnClose)
+	 * @param commitOnClose
+	 * @param initDbSession
+	 */
+	private DatabaseSession(boolean commitOnClose, boolean initDbSession){
+		this.hibernateSession = new HibernateSession(commitOnClose, initDbSession);
+		openSession();
+	}
+	/**
+	 * Commit transaction at the end of the treatment (when you close it)
+	 * @param commitOnClose
+	 */
+	public DatabaseSession(boolean commitOnClose){
+		this(commitOnClose, true);
 	}
 	public DatabaseSession(){
 		this(true);
-		this.willCommit = true;
 	}
 	/**
 	 * Return true if a persist is engaged on this session. (It means 
@@ -50,29 +48,23 @@ public class DatabaseSession {
 	 * @return
 	 */
 	public boolean isSetForCommitting() {
-		return transaction != null && transaction.isActive();
+		return hibernateSession.getTransaction() != null && hibernateSession.getTransaction().isActive();
 	}
 
-	/**
-	 * Initialize session for a modification request
-	 */
-	void initTransaction() {
-		openSession();
-		if(transaction == null){
-			this.transaction = 	this.session.beginTransaction();
+	private void initTransaction() {
+		if(hibernateSession.getTransaction() == null){
+			hibernateSession.setTransaction(getSession().beginTransaction());
 		}
 	}
 	
 	/**
-	 * Return the Hibernate session. Create it if not opened first
+	 * Return the Hibernate session.
 	 * @return
 	 */
 	public Session getSession(){
-		openSession();
-		return session;
+		return hibernateSession.getSession();
 	}
 	
-
 	public void persist(Collection<DataObject> toCommitList){
 		initTransaction();
 		for(DataObject modelData : toCommitList)
@@ -80,19 +72,19 @@ public class DatabaseSession {
 			switch(modelData.getDatabaseOperation())
 			{
 				case DELETE :
-					session.delete(modelData);
+					getSession().delete(modelData);
 					break;
 				case INSERT :
-					session.save(modelData);
+					getSession().save(modelData);
 					break;
 				case INSERT_OR_UPDATE :
-					session.saveOrUpdate(modelData);
+					getSession().saveOrUpdate(modelData);
 					break;
 				case UPDATE :
-					session.update(modelData);
+					getSession().update(modelData);
 					break;
 				case MERGE :
-					session.merge(modelData);
+					getSession().merge(modelData);
 					break;
 				case NO_ACTION:
 				default :
@@ -113,7 +105,7 @@ public class DatabaseSession {
 	public boolean sendForCommit(){
 		if(isWillCommit() && isSetForCommitting()){
 			try{
-				transaction.commit();
+				hibernateSession.getTransaction().commit();
 			}catch(HibernateException e){
 				LOGGER.log(Level.SEVERE,"Can't commit transaction ! ", e);
 				rollback();
@@ -122,53 +114,49 @@ public class DatabaseSession {
 			LOGGER.fine("Session is not set to commit right now, need to use setWillCommit(true) to commit");
 			return true;
 		}
-		transaction = null;
+		hibernateSession.setTransaction(null);
 		return false;		
 	}
 	
 	public boolean rollback(){
 		if(isSetForCommitting()){
-			transaction.rollback();
-			transaction = null;
+			hibernateSession.getTransaction().rollback();
+			hibernateSession.setTransaction(null);
 			return true;
 		}
-		transaction = null;
+		hibernateSession.setTransaction(null);
 		return false;
-	}
-
-	public List<AbstractDataObject> getListOfSqlRequest(String sqlRequest)
-	{
-		openSession();
-		SQLQuery sqlQuery = session.createSQLQuery(sqlRequest);
-		@SuppressWarnings("unchecked")
-		List<AbstractDataObject> list =  sqlQuery.list();
-		return list;
 	}
 
 	private void openSession()
 	{
-		if(session == null){
-			session = HibernateUtils.getSessionFactory().getCurrentSession();
+		if(hibernateSession.getSession() == null){
+			hibernateSession.setSession(HibernateUtils.getSessionFactory().getCurrentSession());
 			initTransaction();
 		}
 	}
 
 	public boolean closeTransaction(){
-		if(transaction != null && isSetForCommitting()){
+		if(hibernateSession.getTransaction() != null && isSetForCommitting()){
 			if(isWillCommit()){
-				transaction.commit();
+				hibernateSession.getTransaction().commit();
 			}else{
 				LOGGER.info("Asked to avoid commit at the end of the transaction");
-				transaction.rollback();
+				hibernateSession.getTransaction().rollback();
 			}
-			transaction = null;
+			hibernateSession.setTransaction(null);
 			return true;
 		}
-		transaction = null;
+		hibernateSession.setTransaction(null);
 		//Nothing to close
 		return false;
 	}
+	/**
+	 * Close transaction with a commit if willSetCommit is set to true or rollback otherwise
+	 */
 	public void close(){
+		//If asked to commit on close set the next try to commit to true
+		hibernateSession.setWillCommit(hibernateSession.isCommitOnClose());
 		if(closeTransaction()){
 			LOGGER.info("You just have close properly a session ");
 		}
@@ -181,28 +169,28 @@ public class DatabaseSession {
 	 * @return the initDbSession
 	 */
 	public boolean hasInitDbSession() {
-		return initDbSession;
+		return hibernateSession.isInitDbSession();
 	}
 
 	/**
 	 * @param initDbSession the initDbSession to set
 	 */
 	protected void setInitDbSession(boolean initDbSession) {
-		this.initDbSession = initDbSession;
+		hibernateSession.setInitDbSession(initDbSession);
 	}
 
 	/**
 	 * @return the willCommit
 	 */
 	public boolean isWillCommit() {
-		return willCommit;
+		return hibernateSession.isWillCommit();
 	}
 
 	/**
 	 * @param willCommit the willCommit to set
 	 */
 	public void setWillCommit(boolean willCommit) {
-		this.willCommit = willCommit;
+		hibernateSession.setWillCommit(willCommit);
 	}
 	
 	/**
@@ -213,8 +201,7 @@ public class DatabaseSession {
 	 * @return The query instance for manipulation and execution
 	 */
 	public Query createQuery(String hqlQuery){
-		initTransaction();
-		return this.session.createQuery(hqlQuery);
+		return getSession().createQuery(hqlQuery);
 	}
 
 	/**
@@ -225,11 +212,17 @@ public class DatabaseSession {
 	 * @return The criteria instance for manipulation and execution
 	 */
 	public Criteria createCriteria(Class<? extends AbstractDataObject> clazz){
-		initTransaction();
-		return this.session.createCriteria(clazz);
+		return getSession().createCriteria(clazz);
 	}
 	
-	public boolean closeQuery(){
-		return closeTransaction();
+	/**
+	 * Create a {@link SQLQuery} instance for the given SQL query string.
+	 *
+	 * @param queryString The SQL query
+	 * 
+	 * @return The query instance for manipulation and execution
+	 */
+	public SQLQuery createSQLQuery(String sql){
+		return getSession().createSQLQuery(sql);
 	}
 }
