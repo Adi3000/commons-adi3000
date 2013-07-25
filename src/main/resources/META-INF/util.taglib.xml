@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib 
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+    version="2.0">
+    <description>Adi3000 JSF bean fonctions</description>
+	<display-name>Adi3000 JSF Utils</display-name>
+    <namespace>http://code.adi3000.com/common/web/jsf/util</namespace>
+
+    <function>
+    	<description>Encode String to be parsed in URL</description>
+        <function-name>urlEncode</function-name>
+        <function-class>com.adi3000.common.web.jsf.UtilsBean</function-class>
+        <function-signature>String urlEncode(java.lang.String)</function-signature>
+    </function>
+</facelet-taglib>
