@@ -7,11 +7,11 @@ import org.hibernate.cfg.Configuration;
 public class HibernateUtils {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
-    private static final String HIBERNATE_CFG_PATH = "/WEB-INF/hibernate.cfg.xml";
+    private static final String HIBERNATE_CFG_PATH = "hibernate.cfg.xml";
     private static SessionFactory buildSessionFactory() { 
     	// Create the SessionFactory from hibernate.cfg.xml
     	//ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder();
-    	Configuration config = new Configuration();
+    	Configuration config = new Configuration().addResource(HIBERNATE_CFG_PATH);
     	try{
     		return  config
     				.configure()
