@@ -7,17 +7,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adi3000.common.database.hibernate.data.AbstractDataObject;
 import com.adi3000.common.util.optimizer.CommonValues;
 
 public class CommonUtils {
-	private static final Logger LOGGER = Logger.getLogger(CommonUtils.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class.getName());
 	public static List<String> parseStringToList(String stringList){
 		if(StringUtils.isEmpty(stringList)){
 			return null;
@@ -33,7 +33,7 @@ public class CommonUtils {
 				listInt.add(Integer.valueOf(s));
 			}
 		}catch(NumberFormatException e){
-			LOGGER.log(Level.WARNING,"One of the input cannot be converted" + stringList,e );
+			LOGGER.warn("One of the input cannot be converted" + stringList,e );
 			listInt = null;
 		}
 		return listInt;

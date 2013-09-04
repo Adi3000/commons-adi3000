@@ -4,7 +4,9 @@ import java.net.SocketAddress;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import com.adi3000.common.util.optimizer.CommonValues;
@@ -20,7 +22,7 @@ import com.adi3000.common.util.optimizer.CommonValues;
  */
 public class Security {
 	
-	private static final Logger LOGGER = Logger.getLogger(Security.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(Security.class.getName());
 	
 	public static final int ERROR = CommonValues.ERROR_OR_INFINITE;  
 	
@@ -30,7 +32,7 @@ public class Security {
 		LOGGER.info("Anonymous UUID Session asked from " + client.toString());
 		UUID uuid = UUID.randomUUID(); 
 		int uuidHash = uuid.hashCode();
-		LOGGER.finer("UUID computed : " + uuid);
+		LOGGER.trace("UUID computed : " + uuid);
 		if (ANONYMOUS_SESSION_ID.add(uuidHash) )
 		{
 			return uuidHash;
@@ -44,7 +46,7 @@ public class Security {
 	private static int generateSessionID(int clientHashCode) {
 		UUID uuid = UUID.randomUUID(); 
 		int uuidHash = uuid.hashCode();
-		LOGGER.finer("UUID computed : " + uuid);
+		LOGGER.trace("UUID computed : " + uuid);
 		if (ANONYMOUS_SESSION_ID.add(uuidHash) )
 		{
 			return uuidHash;

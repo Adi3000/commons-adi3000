@@ -2,21 +2,21 @@ package com.adi3000.common.database.hibernate.session;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adi3000.common.database.hibernate.data.AbstractDataObject;
 import com.adi3000.common.database.hibernate.data.DataObject;
 
 
 public class DatabaseSession {
-	private static final Logger LOGGER = Logger.getLogger(DatabaseSession.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseSession.class);
 
 	private HibernateSession hibernateSession;
 	public DatabaseSession(DatabaseSession db){
@@ -107,11 +107,11 @@ public class DatabaseSession {
 			try{
 				hibernateSession.getTransaction().commit();
 			}catch(HibernateException e){
-				LOGGER.log(Level.SEVERE,"Can't commit transaction ! ", e);
+				LOGGER.error("Can't commit transaction ! ", e);
 				rollback();
 			}
 		}else if (!isWillCommit()){
-			LOGGER.fine("Session is not set to commit right now, need to use setWillCommit(true) to commit");
+			LOGGER.trace("Session is not set to commit right now, need to use setWillCommit(true) to commit");
 			return true;
 		}
 		hibernateSession.setTransaction(null);
@@ -158,7 +158,7 @@ public class DatabaseSession {
 		//If asked to commit on close set the next try to commit to true
 		hibernateSession.setWillCommit(hibernateSession.isCommitOnClose());
 		if(closeTransaction()){
-			LOGGER.info("You just have close properly a session ");
+			LOGGER.trace("You just have close properly a session ");
 		}
 //		if(session != null){
 //			session.close();
