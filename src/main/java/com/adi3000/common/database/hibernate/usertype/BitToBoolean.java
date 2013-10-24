@@ -31,7 +31,7 @@ public class BitToBoolean implements UserType {
 	 * @see org.hibernate.usertype.UserType#returnedClass()
 	 */
 	@Override
-	public Class returnedClass() {
+	public Class<Boolean> returnedClass() {
 		return Boolean.class;
 	}
 

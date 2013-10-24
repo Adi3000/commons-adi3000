@@ -1,5 +1,6 @@
 package com.adi3000.common.database.hibernate.session;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import org.hibernate.Criteria;
@@ -10,7 +11,7 @@ import org.hibernate.Session;
 import com.adi3000.common.database.hibernate.data.AbstractDataObject;
 import com.adi3000.common.database.hibernate.data.DataObject;
 
-public interface DAO<T extends DataObject> {
+public interface DAO<T extends DataObject> extends Serializable{
 	
 	public Session getSession();
 	

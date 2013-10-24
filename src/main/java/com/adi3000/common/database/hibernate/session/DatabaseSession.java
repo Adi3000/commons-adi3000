@@ -3,6 +3,7 @@ package com.adi3000.common.database.hibernate.session;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -14,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.adi3000.common.database.hibernate.data.AbstractDataObject;
 import com.adi3000.common.database.hibernate.data.DataObject;
 
-
+@Deprecated
 public class DatabaseSession {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseSession.class);
 
@@ -131,8 +132,9 @@ public class DatabaseSession {
 	private void openSession()
 	{
 		if(hibernateSession.getSession() == null){
-			hibernateSession.setSession(HibernateUtils.getSessionFactory().getCurrentSession());
-			initTransaction();
+			throw new NotImplementedException("No session factory available. Please set on first");
+			//hibernateSession.setSession(HibernateUtils.getSessionFactory().getCurrentSession());
+			//initTransaction();
 		}
 	}
 

@@ -13,7 +13,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
-import com.adi3000.common.util.CommonUtils;
 import com.adi3000.common.util.optimizer.CommonValues;
 
 /**
@@ -34,7 +33,7 @@ public class CharToBoolean implements UserType {
 	 * @see org.hibernate.usertype.UserType#returnedClass()
 	 */
 	@Override
-	public Class returnedClass() {
+	public Class<Boolean> returnedClass() {
 		return Boolean.class;
 	}
 

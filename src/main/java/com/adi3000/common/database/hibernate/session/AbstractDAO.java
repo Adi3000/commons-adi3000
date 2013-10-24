@@ -18,6 +18,10 @@ import com.adi3000.common.database.hibernate.data.DataObject;
 
 public abstract class AbstractDAO<T extends DataObject> implements DAO<T> {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2730565413517869564L;
 	@Autowired
 	private SessionFactory sessionFactory;
 	
