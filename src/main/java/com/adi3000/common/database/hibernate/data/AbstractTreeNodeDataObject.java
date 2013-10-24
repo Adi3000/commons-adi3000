@@ -17,4 +17,10 @@ public abstract class AbstractTreeNodeDataObject<T extends AbstractTreeNodeDataO
 			child.initializeRecursively();
 		}
 	}
+	public void initializeAncestors(){
+		if(getAncestor() != null){
+			Hibernate.initialize(getAncestor());
+			getAncestor().initializeAncestors();
+		} 
+	}
 }
