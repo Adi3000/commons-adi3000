@@ -1,5 +1,8 @@
 package com.adi3000.common.database.hibernate.session;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -12,6 +15,8 @@ public class HibernateUtils {
     	// Create the SessionFactory from hibernate.cfg.xml
     	//ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder();
     	Configuration config = new Configuration().addResource(HIBERNATE_CFG_PATH);
+    	EntityManagerFactory emf = Persistence.createEntityManagerFactory("latroquette");
+
     	try{
     		return  config
     				.configure()
