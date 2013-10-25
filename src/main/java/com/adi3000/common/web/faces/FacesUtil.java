@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
 
-public class FacesUtils {
+public class FacesUtil {
 	/**
 	 * Return the string value of the parameter {@link name}
 	 * @param name
