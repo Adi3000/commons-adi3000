@@ -23,7 +23,7 @@ public abstract class AbstractDAO<T extends DataObject> implements DAO<T> {
 	 */
 	private static final long serialVersionUID = -2730565413517869564L;
 	@Autowired
-	private SessionFactory sessionFactory;
+	private transient SessionFactory sessionFactory;
 	
 	/**
 	 * @param sessionFactory the sessionFactory to set
