@@ -4,6 +4,7 @@ public class CommonValues {
 
 	public static final int ERROR_OR_INFINITE = -1;
 	public static final String SEPARATOR = ";";
+	public static final String INNER_SEPARATOR = "__";
 	public static final Character TRUE = 'Y';
 	public static final Character FALSE = 'N';
 	
