@@ -1,12 +1,20 @@
 package com.adi3000.common.web.faces;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class FacesUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FacesUtil.class.getName());
+
 	private static String FACES_REDIRECT_PARAMETER = "faces-redirect=true";
+	private static String FACES_INCLUDE_VIEW_PARAMS_PARAMETER = "includeViewParams=true";
 	private FacesUtil(){};
 	/**
 	 * Return the string value of the parameter {@link name}
@@ -37,27 +45,54 @@ public final class FacesUtil {
 	 * Redirect to {@code path} without changing URL
 	 * @param path
 	 */
+	public static void navigationRedirect(String path){
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect(path);
+		} catch (IOException e) {
+			LOGGER.error("Can't redirect to "+ path, e);
+		}
+	}
+	/**
+	 * Redirect to {@code path} with changing URL
+	 * @param path
+	 */
 	public static void navigationForward(String path){
-		ConfigurableNavigationHandler nav 
-		   = (ConfigurableNavigationHandler) 
-				   FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
+		ConfigurableNavigationHandler nav = 
+				(ConfigurableNavigationHandler) 
+				FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
 		nav.performNavigation(path);
 	}
+	
+	
 	/**
 	 * Forward to {@code path} and update the URL
 	 * @param path
 	 */
 	public static String prepareRedirect(String path){
+		return prepareRedirect(path, false);
+	}
+	/**
+	 * Forward to {@code path} and update the URL
+	 * @param path
+	 */
+	public static String prepareRedirect(String path, boolean includeViewParams){
 		if(!path.contains(FACES_REDIRECT_PARAMETER)){
-			if(!path.contains("?")){
-				path = path.concat("?");
-			}else{
-				path = path.concat("&");
-			}
-			path = path.concat(FACES_REDIRECT_PARAMETER);
-				
+			path = addParameterToRequest(path,FACES_REDIRECT_PARAMETER);
+		}
+		if(!path.contains(FACES_INCLUDE_VIEW_PARAMS_PARAMETER)){
+			path = addParameterToRequest(path,FACES_INCLUDE_VIEW_PARAMS_PARAMETER);
 		}
 		return path;
 	}
 	
+	
+	private static String addParameterToRequest(String path, String parameter){
+		if(!path.contains("?")){
+			path = path.concat("?");
+		}else{
+			path = path.concat("&");
+		}
+		path = path.concat(parameter);
+		return path;
+	}
 }
