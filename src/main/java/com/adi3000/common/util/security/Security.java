@@ -63,5 +63,9 @@ public class Security {
 			throw new IllegalArgumentException("User is not logged in ! ");
 		}
 	}
+	
+	public static String encryptedPassword(String password){
+		return password;
+	}
 
 }
