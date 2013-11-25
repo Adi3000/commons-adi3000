@@ -50,7 +50,7 @@ public abstract class AbstractDataObject implements DataObject{
 	public boolean equals(Object o){
 		return this.hashCode() == o.hashCode();
 	}
-	
+	@XmlTransient
 	public boolean isIdSet(){
 		return this.getId() != null;
 	}
