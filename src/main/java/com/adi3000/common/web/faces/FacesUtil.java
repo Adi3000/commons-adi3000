@@ -1,10 +1,13 @@
 package com.adi3000.common.web.faces;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 
 import org.slf4j.Logger;
@@ -94,5 +97,21 @@ public final class FacesUtil {
 		}
 		path = path.concat(parameter);
 		return path;
+	}
+	
+	public static void setCookie(String name, String value, int maxAge, boolean secure){
+		Cookie cookie = new Cookie(name, value);
+		cookie.setPath("/");
+		cookie.setMaxAge(Integer.valueOf(maxAge));
+		cookie.setSecure(Boolean.valueOf(secure));
+		
+		((HttpServletResponse)(FacesContext.getCurrentInstance()
+			 .getExternalContext().getResponse())).addCookie(cookie);
+		LOGGER.trace("Cookie : " + cookie.getName() + " : " + cookie.getValue() + " saved");
+	}
+	public static Object getCookie(String name){
+		return FacesContext.getCurrentInstance()
+					.getExternalContext()
+					.getRequestCookieMap().get(name);
 	}
 }
