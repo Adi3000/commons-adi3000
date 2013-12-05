@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,5 +146,17 @@ public final class CommonUtil {
 			}
 		}
 		return null;
+	}
+	public static Criteria setCriteriaPage(Criteria req, int page, int nbResultToLoad){
+		int cursor = CommonValues.ERROR_OR_INFINITE;
+		cursor = nbResultToLoad * (page -1);
+		req.setFirstResult(cursor).setMaxResults(nbResultToLoad);
+		return req;
+	}
+	public static Query setCriteriaPage(Query req, int page, int nbResultToLoad){
+		int cursor = CommonValues.ERROR_OR_INFINITE;
+		cursor = nbResultToLoad * (page -1);
+		req.setFirstResult(cursor).setMaxResults(nbResultToLoad);
+		return req;
 	}
 }
