@@ -45,7 +45,7 @@ public final class FacesUtil {
 		return value;
 	}
 	/**
-	 * Redirect to {@code path} without changing URL
+	 * Redirect to {@code path} with changing URL
 	 * @param path
 	 */
 	public static void navigationRedirect(String path){
@@ -56,7 +56,7 @@ public final class FacesUtil {
 		}
 	}
 	/**
-	 * Redirect to {@code path} with changing URL
+	 * Redirect to {@code path} without changing URL
 	 * @param path
 	 */
 	public static void navigationForward(String path){
