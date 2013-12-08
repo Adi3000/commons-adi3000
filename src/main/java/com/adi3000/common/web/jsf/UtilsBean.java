@@ -19,6 +19,13 @@ public final class UtilsBean {
 		}
 	}
 	
+	public static String urlDecode(String value, boolean escapePlus){
+		if(escapePlus){
+			return urlDecode(value.replace("+", "%2B"));
+		}else{
+			return urlDecode(value);
+		}
+	}
 	public static String urlDecode(String value){
 		try {
 			return URLDecoder.decode(value,"UTF-8");

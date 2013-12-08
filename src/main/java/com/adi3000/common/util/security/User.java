@@ -23,23 +23,22 @@ public interface User {
 	 */
 	public String getLogin() ;
 	/**
-	 * Set a random token
-	 * @return the token
+	 * Set token to a specific value, must be used by Security service only
+	 * @param uselessValue
+	 * @deprecated use setToken() to generate token
 	 */
-	public void setCurrentToken() ;
+	@Deprecated
+	public void setToken(String token) ;
 	/**
 	 * Get the generated token
 	 * @return the token
 	 */
-	public String getCurrentToken() ;
+	public String getToken() ;
 	/**
 	 * @return the password
 	 */
 	public String getPassword() ;
-	/**
-	 * @return the lastHostNameLogin
-	 */
-	public String getLastHostNameLogin();
+	public void setPassword(String password) ;
 	/**
 	 * @return the mail
 	 */
@@ -56,5 +55,13 @@ public interface User {
 	 * @return Login stat value 
 	 */
 	public Integer getLoginState();
+	/**
+	 * @return salt String
+	 */
+	public String getSalt();
+	/**
+	 * @return salt String
+	 */
+	public void setSalt(String salt);
 	
 }
