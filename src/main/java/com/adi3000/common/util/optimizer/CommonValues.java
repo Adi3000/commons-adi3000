@@ -7,6 +7,8 @@ public class CommonValues {
 	public static final String INNER_SEPARATOR = "__";
 	public static final Character TRUE = 'Y';
 	public static final Character FALSE = 'N';
+	public static final String URI_PARAMETER_SEPARATOR = "&";
+	public static final String URI_VALUE_SEPARATOR = "=";
 	
 	
 }
