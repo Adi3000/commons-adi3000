@@ -159,4 +159,10 @@ public final class CommonUtil {
 		req.setFirstResult(cursor).setMaxResults(nbResultToLoad);
 		return req;
 	}
+	public static String parsePlainTextToHtml(String text){
+		if(text != null){
+			return text.replace("\n", "<br />");
+		}
+		return null;
+	}
 }
