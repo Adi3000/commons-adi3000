@@ -11,6 +11,7 @@ public final class UtilsBean {
 	 * @return encoded string
 	 */
 	public static String urlEncode(String value){
+		if(value == null) return value;
 		try {
 			return URLEncoder.encode(value,"UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -27,6 +28,7 @@ public final class UtilsBean {
 		}
 	}
 	public static String urlDecode(String value){
+		if(value == null) return value;
 		try {
 			return URLDecoder.decode(value,"UTF-8");
 		} catch (UnsupportedEncodingException e) {
