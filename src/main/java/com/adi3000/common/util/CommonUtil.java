@@ -73,7 +73,7 @@ public final class CommonUtil {
 	 * @param list to format
 	 * @return {@link String} of all object of list separated by {@code separator}
 	 */
-	public static String formatListToString(List<?> list){
+	public static String formatListToString(Collection<?> list){
 		return formatListToString(list, CommonValues.SEPARATOR);
 	}
 	/**
@@ -81,7 +81,7 @@ public final class CommonUtil {
 	 * @param list to format
 	 * @return {@link String} of all object of list separated by {@code separator}
 	 */
-	public static String formatListToString(List<?> list, String separator){
+	public static String formatListToString(Collection<?> list, String separator){
 		if(list == null){
 			return null;
 		}
