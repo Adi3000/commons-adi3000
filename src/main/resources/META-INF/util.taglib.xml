@@ -14,4 +14,10 @@
         <function-class>com.adi3000.common.web.jsf.UtilsBean</function-class>
         <function-signature>String urlEncode(java.lang.String)</function-signature>
     </function>
+    <function>
+    	<description>Limit a phrase to a defined size</description>
+        <function-name>limit</function-name>
+        <function-class>com.adi3000.common.web.jsf.UtilsBean</function-class>
+        <function-signature>String limit(java.lang.String, java.lang.Integer)</function-signature>
+    </function>
 </facelet-taglib>
