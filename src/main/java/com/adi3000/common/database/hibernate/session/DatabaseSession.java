@@ -3,7 +3,6 @@ package com.adi3000.common.database.hibernate.session;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -132,7 +131,7 @@ public class DatabaseSession {
 	private void openSession()
 	{
 		if(hibernateSession.getSession() == null){
-			throw new NotImplementedException("No session factory available. Please set on first");
+			throw new IllegalStateException("No session factory available. Please set on first");
 			//hibernateSession.setSession(HibernateUtils.getSessionFactory().getCurrentSession());
 			//initTransaction();
 		}

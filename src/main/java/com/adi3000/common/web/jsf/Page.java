@@ -1,6 +1,6 @@
 package com.adi3000.common.web.jsf;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.adi3000.common.util.optimizer.CommonValues;
 
