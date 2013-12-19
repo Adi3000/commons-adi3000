@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.BreakIterator;
+import java.util.Collection;
 
 public final class UtilsBean {
 	/**
@@ -36,6 +37,10 @@ public final class UtilsBean {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public static Integer sizeOf(Collection<?> coll){
+		if(coll == null) return 0;
+		return coll.size();
 	}
 	public static String limit(String value, Integer length){
 		if(value == null || value.length() <= length) return value;
