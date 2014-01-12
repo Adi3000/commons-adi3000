@@ -5,12 +5,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.adi3000.common.database.hibernate.DatabaseOperation;
 import com.adi3000.common.database.hibernate.data.AbstractDataObject;
@@ -21,7 +22,11 @@ public abstract class AbstractDAO<T extends DataObject> implements DAO<T> {
 	/**
 	 * 
 	 */
-	@Autowired
+	private static final long serialVersionUID = 8495076397653964860L;
+	/**
+	 * 
+	 */
+	@Inject
 	private transient SessionFactory sessionFactory;
 	
 	/**
