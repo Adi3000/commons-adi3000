@@ -18,14 +18,39 @@ public interface DAO<T extends DataObject> extends Serializable{
 	public void persist(Collection<DataObject> toCommitList);
 
 	public void persist(DataObject modelData);
-	public T getDataObjectById(Integer id, Class<? extends DataObject> clazz);
 	
+	/**
+	 * Update, delete or insert data according to the {@link DataObject}.dataOperation attribute
+	 * @param data
+	 */
 	public void modify(T data);
-	
+
+	/**
+	 * Update, delete or insert a {@link Collection} of {@link DataObject} according to the {@link DataObject}.dataOperation attribute
+	 * @param data
+	 * @return
+	 */
 	public Collection<T>  modifyDataObject(Collection<T> data);
+	/**
+	 * Update, delete or insert data according to the {@link DataObject}.dataOperation attribute
+	 * returning the updated data
+	 * @param data
+	 * @return
+	 */
 	public T  modifyDataObject(T data);
-	
+
+	/**
+	 * Delet a {@link DataObject}
+	 * @param data
+	 */
 	public void deleteDataObject(T data);
+	
+	/**
+	 * Retrive {@link DataObject} by its {@code id}
+	 * @param model
+	 * @return
+	 */
+	public T get(Serializable id);
 	
 	public T getDataObject(AbstractDataObject model);
 	

@@ -1,5 +1,6 @@
 package com.adi3000.common.database.hibernate.session;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,6 +30,18 @@ public abstract class AbstractDAO<T extends DataObject> implements DAO<T> {
 	@Inject
 	private transient SessionFactory sessionFactory;
 	
+	private final Class<T> clazz;
+	
+	public AbstractDAO(Class<T> clazz){
+		this.clazz = clazz;
+	}
+	
+	public T get(Serializable id){
+		@SuppressWarnings("unchecked")
+		T data = (T)getSession().get(clazz, id);
+		return data ;
+	}
+	
 	/**
 	 * @param sessionFactory the sessionFactory to set
 	 */
@@ -36,10 +49,6 @@ public abstract class AbstractDAO<T extends DataObject> implements DAO<T> {
 		this.sessionFactory = sessionFactory;
 	}
 
-	public AbstractDAO(){
-		super();
-	}
-	
 	public Session getSession(){
 		return  sessionFactory.getCurrentSession();
 	}
@@ -73,11 +82,6 @@ public abstract class AbstractDAO<T extends DataObject> implements DAO<T> {
 
 	public void persist(DataObject modelData){
 		persist(Collections.singleton(modelData));
-	}
-	public T getDataObjectById(Integer id, Class<? extends DataObject> clazz){
-		@SuppressWarnings("unchecked")
-		T data = (T)getSession().get(clazz, id);
-		return data ;
 	}
 	
 	public void modify(T data){
