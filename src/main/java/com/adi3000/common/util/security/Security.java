@@ -46,6 +46,14 @@ public class Security {
      * @param user
      * @return
      */
+    public static String generateTokenID() {
+    	return generateTokenID(null);
+    }
+    /**
+     * Generate a random token
+     * @param user
+     * @return
+     */
 	public static String generateTokenID(User user) {
 		SecureRandom random = new SecureRandom();
         byte[] hash = new byte[HASH_BYTE_SIZE];
@@ -101,7 +109,7 @@ public class Security {
 			LOGGER.error("Can't find "+DIGEST_ALGORITHM+" algorithm for digest", e1);
 			throw new IllegalArgumentException("Can't find "+DIGEST_ALGORITHM+" algorithm for digest", e1);
 		}
-		String digestedPhrase = Base64.encodeBase64String(messageDigest.digest(Base64.decodeBase64(phrase)));
+		String digestedPhrase = Base64.encodeBase64URLSafeString(messageDigest.digest(Base64.decodeBase64(phrase)));
 		return digestedPhrase;
 	}
 	
@@ -236,6 +244,6 @@ public class Security {
      */
     private static String toBase64(byte[] array)
     {
-    	return Base64.encodeBase64String(array);
+    	return Base64.encodeBase64URLSafeString(array);
     }
 }
